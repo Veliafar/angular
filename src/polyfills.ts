@@ -82,4 +82,6 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
+* hammerjs is required by default for Angular Material.
  */
+import 'hammerjs';

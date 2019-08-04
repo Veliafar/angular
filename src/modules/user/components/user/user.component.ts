@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserInterface } from '../../../../interfaces';
 import { ApiService } from '../../../core/services';
@@ -14,7 +14,8 @@ export class UserComponent implements OnInit {
 
   constructor(private apiService: ApiService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) { }
+              private router: Router,
+              private cdRef: ChangeDetectorRef) { }
 
   ngOnInit() {
     const userId: number = this.activatedRoute.snapshot.params['id'];
@@ -25,5 +26,9 @@ export class UserComponent implements OnInit {
 
   back(): void {
     this.router.navigate(['./users']);
+  }
+
+  ngAfterContentInit() {
+    this.cdRef.detectChanges();
   }
 }

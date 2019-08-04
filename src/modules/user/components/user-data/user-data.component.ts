@@ -8,10 +8,22 @@ import { UserComponent } from '../user/user.component';
   styleUrls: ['./user-data.component.css']
 })
 export class UserDataComponent implements OnInit {
+  _user: UserInterface;
 
-  @Input() user: UserInterface;
+  @Input()
+  set user(value) {
+    if (value) {
+      this._user = value;
+    }
+  }
 
-  constructor(@Optional() private parent: UserComponent) { }
+  get user() {
+    return this._user;
+  }
+
+  constructor(
+    @Optional() private parent: UserComponent
+  ) { }
 
   ngOnInit() {
     console.log(this.parent);
