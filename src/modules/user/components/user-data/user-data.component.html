@@ -1,29 +1,17 @@
-<div class="row">
-    <div class="clients-list__list col-xs-12">
-        <div class="table-responsive">
-            <table class="table table-hover table-condensed col-xs-12">
-                <thead>
-                    <tr>
-                        <th class="col-xs-3"> First name </th>
-                        <th class="col-xs-3"> Last name </th>
-                        <th class="col-xs-3"> Email </th>
-                        <th class="col-xs-3"> Avatar </th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="_user && _user.data">
-                    <tr>
-                        <td> {{ _user.data.first_name }}
-                        </td>
-                        <td> {{ _user.data.last_name }}
-                        </td>
-                        <td> {{ _user.data.email }}
-                        </td>
-                        <td>
-                            <img src={{_user.data.avatar}} alt="">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+<mat-card class="example-card" *ngIf="userData">
+    <mat-card-header>
+        <img mat-card-avatar class="example-header-image" src={{userData.avatar}}>
+        <mat-card-title>{{ userData.first_name }} {{ userData.last_name }}</mat-card-title>
+        <mat-card-subtitle>{{ userData.email }}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src={{userData.avatar}}>
+    <mat-card-content>
+        <p>
+            The info
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+    </mat-card-actions>
+</mat-card>

@@ -5,6 +5,7 @@ import { map, catchError, takeUntil } from 'rxjs/operators';
 import { UserInterface } from '../../../../interfaces';
 import { ApiService } from '../../../core/services';
 import { throwError, Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-users-list',
@@ -18,9 +19,12 @@ export class UsersListComponent implements OnInit {
   userList: any[] = [];
   pagesCount: number;
 
-  constructor(private activatedRoute: ActivatedRoute,
+  constructor(
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private userService: ApiService) {
+    private userService: ApiService,
+    private toastr: ToastrService,
+  ) {
   }
 
   ngOnInit() {
@@ -29,16 +33,16 @@ export class UsersListComponent implements OnInit {
         return data.users
       })
     )
-    .subscribe((users: UserInterface[]) => {
-      this.userList = users;
-    });
+      .subscribe((users: UserInterface[]) => {
+        this.userList = users;
+      });
 
     this.activatedRoute.data.pipe(
       map(data => data.paginationInfo)
     )
-    .subscribe(paginationInfo => {
-      this.pagesCount = paginationInfo.total;
-    })
+      .subscribe(paginationInfo => {
+        this.pagesCount = paginationInfo.total;
+      })
   }
 
   pageChanged(event: PageEvent): void {
@@ -60,9 +64,7 @@ export class UsersListComponent implements OnInit {
       .pipe(
         takeUntil(this.ngUnsubscribe),
         catchError(error => {
-          // this.toastr.error(
-          //     this.i18next.transform('error:baseError.requestError')
-          // );
+          this.toastr.error('Request error');
           return throwError(error);
         })
       )

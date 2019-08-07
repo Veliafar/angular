@@ -2,6 +2,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserInterface } from '../../../../interfaces';
 import { ApiService } from '../../../core/services';
+import { catchError, takeUntil } from 'rxjs/operators';
+import { throwError, Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user',
@@ -9,19 +12,41 @@ import { ApiService } from '../../../core/services';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
+  private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   user: UserInterface;
 
-  constructor(private apiService: ApiService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private cdRef: ChangeDetectorRef) { }
+  constructor(
+    private apiService: ApiService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastr: ToastrService,
+    private cdRef: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
     const userId: number = this.activatedRoute.snapshot.params['id'];
-    this.apiService.fetchUserById(userId).subscribe((user: UserInterface) => {
-      this.user = user;
-    });
+    this.getUsers(userId);
+  }
+
+  getUsers(userId) {
+    if (!userId) {
+      this.toastr.error('Request error');
+      return;
+    }
+    this.apiService
+      .fetchUserById(userId)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        catchError(error => {
+          this.toastr.error('Request error');
+          return throwError(error);
+        })
+      )
+      .subscribe(
+        (user: UserInterface) => {
+          this.user = user;
+        });
   }
 
   back(): void {
@@ -30,5 +55,10 @@ export class UserComponent implements OnInit {
 
   ngAfterContentInit() {
     this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

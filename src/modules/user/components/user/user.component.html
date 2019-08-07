@@ -1,3 +1,5 @@
-<button (click)="back()">Back</button>
-
-<app-user-data [user]="user"></app-user-data>
+<button mat-raised-button color="primary" (click)="back()">Back</button>
+<hr>
+<div class="user-data__content">
+    <app-user-data *ngIf="user" [user]="user"></app-user-data>
+</div>

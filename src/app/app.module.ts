@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from '../modules/core';
-import { UsersListModule } from '../modules/users-list';
+import { UserModule } from './../modules/user/user.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,12 @@ import { AppComponent } from './app.component';
     CoreModule.forRoot(),
     RouterModule,
     AppRoutingModule,
-    UsersListModule,
+    UserModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true
+  }),
   ],
   providers: [],
   bootstrap: [AppComponent]
